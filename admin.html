@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin | Safar Haramain</title>
+  <meta name="description" content="Panel admin untuk mengelola paket, jadwal, dan review website Safar Haramain.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "ui-sans-serif", "system-ui"]
+          },
+          colors: {
+            haramain: {
+              green: "#0E6B4B",
+              teal: "#0F9F8F",
+              ink: "#16201B",
+              coral: "#E45D52",
+              gold: "#D7A84D",
+              mist: "#E8F5F1"
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="bg-haramain-mist font-sans text-haramain-ink">
+  <main class="mx-auto max-w-7xl px-5 py-8 lg:px-8">
+    <section class="admin-band">
+      <div class="flex flex-col gap-6 xl:grid xl:grid-cols-[1.1fr_0.9fr] xl:items-stretch">
+        <div class="admin-intro">
+          <p class="admin-kicker">Panel admin</p>
+          <h1>Kelola paket, jadwal, dan review dalam satu dashboard.</h1>
+          <p>Perubahan yang disimpan di sini langsung dipakai oleh homepage pada browser yang sama. Cocok untuk demo statis, presentasi, atau prototipe cepat.</p>
+          <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+            <a href="index.html" class="admin-button">Lihat Website</a>
+            <button id="resetDemoButton" type="button" class="admin-button secondary">Reset Data Demo</button>
+          </div>
+        </div>
+
+        <div class="admin-visual">
+          <img src="https://images.unsplash.com/photo-1579305796538-03268c05b65c?auto=format&fit=crop&w=1400&q=80" alt="Jamaah beribadah di sekitar Kakbah">
+          <div class="admin-visual-copy">
+            <p>Sinkron dengan homepage</p>
+            <strong>Update paket, ubah jadwal, lalu moderasi review jamaah.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="admin-band">
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <article class="metric-card">
+          <span id="packageCount">0</span>
+          <p>Paket aktif</p>
+        </article>
+        <article class="metric-card">
+          <span id="scheduleCount">0</span>
+          <p>Jadwal tampil</p>
+        </article>
+        <article class="metric-card">
+          <span id="approvedReviewCount">0</span>
+          <p>Review tayang</p>
+        </article>
+        <article class="metric-card">
+          <span id="pendingReviewCount">0</span>
+          <p>Review menunggu</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="admin-band">
+      <div class="admin-section-head">
+        <div>
+          <p class="admin-kicker">Paket</p>
+          <h2>Kelola paket perjalanan</h2>
+        </div>
+        <p>Tambah, edit, atau hapus paket. Homepage menampilkan maksimal 6 paket, sisanya otomatis masuk ke halaman paket.</p>
+      </div>
+
+      <div class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <form id="packageForm" class="admin-card admin-form">
+          <input type="hidden" name="id">
+          <input type="hidden" name="image">
+          <label>
+            Badge paket
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3H4v7l9.59 9.59a2 2 0 0 0 2.82 0l4.18-4.18a2 2 0 0 0 0-2.82Z"></path><circle cx="7.5" cy="7.5" r="1.5"></circle></svg>
+              </span>
+              <input type="text" name="badge" placeholder="Contoh: Umroh Reguler" required>
+            </div>
+          </label>
+          <label>
+            Judul paket
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg>
+              </span>
+              <input type="text" name="title" placeholder="Contoh: Umroh Plus Thaif" required>
+            </div>
+          </label>
+          <label>
+            Harga atau status
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2.5"></circle><path d="M6 12h.01"></path><path d="M18 12h.01"></path></svg>
+              </span>
+              <input type="text" name="priceLabel" placeholder="Contoh: Rp 34,5 jt atau Daftar tunggu" required>
+            </div>
+          </label>
+          <label>
+            Label tombol
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </span>
+              <input type="text" name="buttonLabel" placeholder="Contoh: Pilih" required>
+            </div>
+          </label>
+          <label>
+            Deskripsi
+            <div class="field-shell textarea-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
+              </span>
+              <textarea name="description" rows="4" placeholder="Tulis ringkasan paket" required></textarea>
+            </div>
+          </label>
+          <label>
+            Upload gambar
+            <div class="field-shell file-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"></path></svg>
+              </span>
+              <input id="packageImageUpload" type="file" name="imageUpload" accept="image/*">
+            </div>
+            <span class="field-help">Pilih file gambar dari komputer. Gambar akan dioptimasi untuk penyimpanan browser.</span>
+          </label>
+          <label>
+            URL gambar alternatif
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+              </span>
+              <input type="url" name="imageUrl" placeholder="https://images.unsplash.com/...">
+            </div>
+            <span class="field-help">Isi URL jika ingin memakai gambar online sebagai pengganti upload.</span>
+          </label>
+          <div class="image-panel">
+            <div class="image-preview">
+              <img id="packageImagePreview" alt="Preview gambar paket" class="hidden">
+              <div id="packageImagePlaceholder" class="preview-placeholder">
+                <span class="preview-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21"></path></svg>
+                </span>
+                <strong>Preview gambar paket</strong>
+                <p>Upload file atau isi URL gambar untuk melihat hasilnya di sini.</p>
+              </div>
+            </div>
+            <div class="preview-actions">
+              <button id="clearPackageImage" type="button" class="admin-button secondary">Hapus Gambar</button>
+            </div>
+          </div>
+          <label>
+            Alt gambar
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.06 12C3.34 7.82 7.24 5 12 5s8.66 2.82 9.94 7c-1.28 4.18-5.18 7-9.94 7S3.34 16.18 2.06 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </span>
+              <input type="text" name="alt" placeholder="Deskripsi singkat gambar" required>
+            </div>
+          </label>
+          <label class="inline-option">
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </span>
+            <input type="checkbox" name="featured">
+            Jadikan paket unggulan
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="admin-button">Simpan Paket</button>
+            <button id="cancelPackageEdit" type="button" class="admin-button secondary hidden">Batal Edit</button>
+          </div>
+          <p id="packageFormMessage" class="admin-message hidden"></p>
+        </form>
+
+        <div class="admin-list" id="packageAdminList"></div>
+      </div>
+    </section>
+
+    <section class="admin-band">
+      <div class="admin-section-head">
+        <div>
+          <p class="admin-kicker">Jadwal</p>
+          <h2>Kelola jadwal keberangkatan</h2>
+        </div>
+        <p>Semua jadwal yang disimpan di sini akan muncul di halaman depan.</p>
+      </div>
+
+      <div class="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+        <form id="scheduleForm" class="admin-card admin-form">
+          <input type="hidden" name="id">
+          <label>
+            Nama paket
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg>
+              </span>
+              <input type="text" name="packageName" placeholder="Contoh: Umroh Reguler 9 Hari" required>
+            </div>
+          </label>
+          <label>
+            Rute atau catatan
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              </span>
+              <input type="text" name="route" placeholder="Contoh: Jakarta - Jeddah - Makkah - Madinah" required>
+            </div>
+          </label>
+          <label>
+            Tanggal tampil
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M3 10h18"></path></svg>
+              </span>
+              <input type="text" name="dateText" placeholder="Contoh: 18 Mei 2026" required>
+            </div>
+          </label>
+          <label>
+            Label tombol
+            <div class="field-shell">
+              <span class="input-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </span>
+              <input type="text" name="buttonLabel" placeholder="Contoh: Daftar" required>
+            </div>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="admin-button">Simpan Jadwal</button>
+            <button id="cancelScheduleEdit" type="button" class="admin-button secondary hidden">Batal Edit</button>
+          </div>
+          <p id="scheduleFormMessage" class="admin-message hidden"></p>
+        </form>
+
+        <div class="admin-list" id="scheduleAdminList"></div>
+      </div>
+    </section>
+
+    <section class="admin-band">
+      <div class="admin-section-head">
+        <div>
+          <p class="admin-kicker">Review</p>
+          <h2>Tinjau review jamaah</h2>
+        </div>
+        <p>Review dari form publik akan masuk ke sini sebagai menunggu persetujuan.</p>
+      </div>
+
+      <div class="admin-list" id="reviewAdminList"></div>
+    </section>
+  </main>
+
+  <script src="data-store.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
